@@ -1,0 +1,73 @@
+<h2 class="sr-only">Interactive simulator: choose two telescope lenses and see the light path and resulting view size change</h2>
+
+<div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:1rem;">
+  <div style="flex:1; min-width:140px;">
+    <label style="font-size:14px; color:var(--text-secondary); display:block; margin-bottom:6px;">Objective lens</label>
+    <select id="lens1" style="width:100%;">
+      <option value="1.5">1.5x</option>
+      <option value="2" selected>2x</option>
+      <option value="3">3x</option>
+      <option value="5">5x</option>
+      <option value="10">10x</option>
+    </select>
+  </div>
+  <div style="flex:1; min-width:140px;">
+    <label style="font-size:14px; color:var(--text-secondary); display:block; margin-bottom:6px;">Eyepiece lens</label>
+    <select id="lens2" style="width:100%;">
+      <option value="4">4x</option>
+      <option value="10">10x</option>
+      <option value="20">20x</option>
+      <option value="50" selected>50x</option>
+      <option value="100">100x</option>
+    </select>
+  </div>
+</div>
+
+<svg width="100%" viewBox="0 0 680 260" role="img">
+<title>Light path through objective and eyepiece lens, with view size comparison</title>
+<desc>Shows light converging through two lenses and the resulting magnified view size compared to the naked-eye view</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<line x1="30" y1="80" x2="160" y2="120" stroke="#EF9F27" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="30" y1="160" x2="160" y2="140" stroke="#EF9F27" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="160" y="90" width="220" height="60" fill="none" stroke="var(--t)" stroke-width="1"/>
+<g class="c-blue"><ellipse cx="178" cy="120" rx="8" ry="26" stroke-width="1"/></g>
+<line x1="178" y1="100" x2="270" y2="120" stroke="#EF9F27" stroke-width="1" opacity="0.7"/>
+<line x1="178" y1="140" x2="270" y2="120" stroke="#EF9F27" stroke-width="1" opacity="0.7"/>
+<circle cx="270" cy="120" r="3" fill="#EF9F27"/>
+<line x1="270" y1="120" x2="362" y2="100" stroke="#EF9F27" stroke-width="1" opacity="0.7"/>
+<line x1="270" y1="120" x2="362" y2="140" stroke="#EF9F27" stroke-width="1" opacity="0.7"/>
+<g class="c-teal"><ellipse cx="362" cy="120" rx="7" ry="22" stroke-width="1"/></g>
+<line x1="362" y1="100" x2="470" y2="70" stroke="#EF9F27" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="362" y1="140" x2="470" y2="170" stroke="#EF9F27" stroke-width="1" marker-end="url(#arrow)"/>
+
+<text class="th" x="178" y="170" text-anchor="middle">Objective</text>
+<text class="th" x="362" y="170" text-anchor="middle">Eyepiece</text>
+
+<text class="th" x="70" y="200" text-anchor="middle">Naked eye view</text>
+<circle id="naked-circle" cx="70" cy="225" r="8" fill="none" stroke="var(--t)" stroke-width="1"/>
+
+<text class="th" x="580" y="200" text-anchor="middle">Telescope view</text>
+<circle id="mag-circle" cx="580" cy="225" r="8" fill="none" class="c-amber" stroke-width="1"/>
+</svg>
+
+<div style="background:var(--surface-1); border-radius:var(--radius); padding:1rem; display:flex; align-items:center; justify-content:center; gap:12px; font-size:16px; margin-top:0.5rem;">
+  <span id="eq" style="color:var(--text-secondary);">2x &times; 50x =</span>
+  <span id="result" style="font-size:24px; font-weight:500; color:var(--text-accent);">100x</span>
+</div>
+
+<script>
+function update() {
+  var l1 = parseFloat(document.getElementById('lens1').value);
+  var l2 = parseFloat(document.getElementById('lens2').value);
+  var total = Math.round(l1 * l2 * 100) / 100;
+  document.getElementById('eq').textContent = l1 + 'x \u00d7 ' + l2 + 'x =';
+  document.getElementById('result').textContent = total + 'x';
+  var r = 8 + Math.min(Math.log(total) * 9, 55);
+  document.getElementById('mag-circle').setAttribute('r', r.toFixed(1));
+}
+document.getElementById('lens1').addEventListener('change', update);
+document.getElementById('lens2').addEventListener('change', update);
+</script>
